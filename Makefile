@@ -23,7 +23,7 @@ LIBDIR=$(prefix)/lib
 INCDIR=$(prefix)/include
 
 # Your compiler
-CC = gcc
+CC = g++
 # Compile flags
 CDEBUGFLAGS = -O -Wall # -g
 

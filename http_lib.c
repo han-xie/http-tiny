@@ -349,7 +349,7 @@ httpmt_get(http_ctx *ctx, char *filename, char **pdata, int *plength, char *type
 			close(fd);
 		} else {
 			*plength = length;
-			if (!(*pdata = malloc(length))) {
+			if (!(*pdata = (char *) malloc(length))) {
 				close(fd);
 				return ERRMEM;
 			}
@@ -549,7 +549,7 @@ httpmt_post(http_ctx *ctx, char *filename, char *data, int length, char *type,
 
 			close(fd);
 		} else {
-			if (!(*pdata = malloc(*plength))) {
+			if (!(*pdata = (char *) malloc(*plength))) {
 				close(fd);
 				if (ptype) {
 					free(*ptype);
@@ -767,7 +767,7 @@ http_query(http_ctx *ctx, char *command, char *url, char *additional_header,
 			ret = ERRWRDT;
 		} else {
 			/* read result & check */
-			ret = http_read_line(s, header, MAXBUF - 1);
+			ret = (http_retcode) http_read_line(s, header, MAXBUF - 1);
 
 			if (ret <= 0) 
 				ret = ERRRDHD;
@@ -847,7 +847,7 @@ http_read_buffer_eof(int fd, char **pbuffer, int *plength)
 	int r = 0;
 	static int page_size = 0;
 	int to_read;
-	void *data;
+	char *data;
 	int size = 0;
 
 	if (page_size == 0) 
@@ -863,7 +863,7 @@ http_read_buffer_eof(int fd, char **pbuffer, int *plength)
 	do {
 		if (*plength >= size) {
 			size += page_size;
-			data = realloc(*pbuffer, size);
+			data = (char *) realloc(*pbuffer, size);
 			if (data == NULL) {
 				r = -1;
 				free(*pbuffer);
